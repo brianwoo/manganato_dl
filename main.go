@@ -30,11 +30,15 @@ func printParams(inputFile *string, outputFile *string, mangaUrl *string, baseUr
 	}
 }
 
-func validateParams(inputFile *string, mangaUrl *string) {
+func validateParams(inputFile *string, mangaUrl *string, fromChapter *int, toChapter *int) {
 	if len(*inputFile) == 0 && len(*mangaUrl) == 0 {
 		panic("One of the flags: -i or -u is required. -h for usage")
 	} else if len(*inputFile) > 0 && len(*mangaUrl) > 0 {
 		panic("Please enter -i or -u, but not both. -h for usage")
+	}
+
+	if *fromChapter < 0 || *toChapter < 0 {
+		panic("Invalid chapter entered!")
 	}
 }
 
@@ -62,7 +66,7 @@ func storeMangaInfo(inputFile *string, outputFile *string, mangaInfo *chapter.Ma
 func downloadChapters(baseDir *string, mangaInfo *chapter.MangaInfo, fromChapter *int, toChapter *int) {
 
 	endChapter := 0
-	if *toChapter == 0 {
+	if *toChapter == 0 || *toChapter > len(mangaInfo.ChapterList) {
 		endChapter = len(mangaInfo.ChapterList)
 	} else {
 		endChapter = *toChapter
@@ -92,7 +96,7 @@ func main() {
 
 	flag.Parse()
 
-	validateParams(inputFile, mangaUrl)
+	validateParams(inputFile, mangaUrl, fromChapter, toChapter)
 	printParams(inputFile, outputFile, mangaUrl, baseDir, fromChapter, toChapter)
 
 	mangaInfo := getMangaInfo(inputFile, mangaUrl)
