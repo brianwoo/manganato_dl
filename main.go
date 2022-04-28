@@ -32,9 +32,9 @@ func printParams(inputFile *string, outputFile *string, mangaUrl *string, baseUr
 
 func validateParams(inputFile *string, mangaUrl *string) {
 	if len(*inputFile) == 0 && len(*mangaUrl) == 0 {
-		panic("One of the flags: -i or -u is required")
+		panic("One of the flags: -i or -u is required. -h for usage")
 	} else if len(*inputFile) > 0 && len(*mangaUrl) > 0 {
-		panic("Please enter -i or -u, but not both")
+		panic("Please enter -i or -u, but not both. -h for usage")
 	}
 }
 
